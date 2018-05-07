@@ -2,6 +2,8 @@ package com.example.employee.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Employee {
@@ -13,6 +15,9 @@ public class Employee {
     private String gender;
     private Integer salary;
     private Integer companyId;
+    @ManyToOne
+    @JoinColumn(name="companyId", insertable = false, updatable = false)
+    private Company company;
 
     public Employee() {
         super();
@@ -31,6 +36,7 @@ public class Employee {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -73,5 +79,13 @@ public class Employee {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

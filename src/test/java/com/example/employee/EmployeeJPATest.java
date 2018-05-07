@@ -18,6 +18,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
@@ -41,7 +43,6 @@ public class EmployeeJPATest {
     public void should_return_employee_when_input_employee_name() throws Exception {
         //1.查询名字是小红的employee
         Employee expectedEmployee = new Employee("xiaohong",19,"female",7000,1, 1);
-
         String actualName = employeeRepository.findFristByName("xiaohong").getName();
         assertThat(actualName).isEqualTo(expectedEmployee.getName());
     }
@@ -66,7 +67,7 @@ public class EmployeeJPATest {
     public void should_return_employee_list_when_input_page_request() throws Exception {
         //4.实现对Employee的分页查询，每页两条数据，一共三页数。
         //注意：PageRequest的构造方法已经弃用了代替的是PageRequest.of,并且最后一个参数代表按照table中的哪一个字段排序
-        Page<Employee> EmployeePage = employeeRepository.findAll(PageRequest.of(3,2));
+        Page<Employee> EmployeePage = employeeRepository.findAll(PageRequest.of(0,2));
         assertThat(EmployeePage.getTotalPages()).isEqualTo(3);
     }
 
@@ -74,7 +75,7 @@ public class EmployeeJPATest {
     public void should_return_company_name_when_input_employee_name() throws Exception {
         //5.查找xiaohong的所在的公司的公司名称
         String expectedCompanyName = "alibaba";
-        String actualCompanyName = employeeRepository.findCompanyNameByName("xiaohong");
+        String actualCompanyName = employeeRepository.findByName("xiaohong").getCompany().getCompanyName();
         assertThat(actualCompanyName).isEqualTo(expectedCompanyName);
     }
 
@@ -82,7 +83,7 @@ public class EmployeeJPATest {
     public void should_return_influence_lines_when_update_employee_name() throws Exception {
         //6.将xiaohong的名字改成xiaobai,输出这次修改影响的行数
         Integer expectedLine = 1;
-        Integer actualLine = employeeRepository.updateName("xiaohong", "xiaobai");
+        Integer actualLine = employeeRepository.updateName("xiaobai", "xiaohong");
         assertThat(actualLine).isEqualTo(expectedLine);
     }
 
@@ -92,5 +93,21 @@ public class EmployeeJPATest {
         Integer expectedLine = 1;
         Integer actualLine = employeeRepository.deleteByName("xiaohong");
         assertThat(actualLine).isEqualTo(expectedLine);
+    }
+
+    @Test
+    public void should_find_employees_salary_between_6000_to_7000() {
+        //8.找到工资在6000-7000范围内的employee
+        int employeeSize = 3;
+        List<Employee> employees = employeeRepository.findBySalaryBetween(6000, 7000);
+        assertThat(employees.size()).isEqualTo(employeeSize);
+    }
+
+    @Test
+    public void should_find_employee_by_query() {
+        //9.通过写JPQL查询名字含有"xiaozhi"的employee
+        String expectedName = "xiaozhi";
+        Employee employee = employeeRepository.findNameByJPQL("xiaozhi");
+        assertThat(expectedName).isEqualTo(employee.getName());
     }
 }

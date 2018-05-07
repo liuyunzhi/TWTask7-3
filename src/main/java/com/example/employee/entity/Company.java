@@ -9,17 +9,16 @@ public class Company {
     @Id
     private Integer id;
     private String companyName;
-    private Integer employeeNumber;
+    private Integer employeesNumber;
 
     public Company(){
         super();
     }
 
-    public Company(Integer id, String companyName, Integer employeeNumber){
-
+    public Company(Integer id, String companyName, Integer employeesNumber){
         this.id = id;
         this.companyName = companyName;
-        this.employeeNumber = employeeNumber;
+        this.employeesNumber = employeesNumber;
     }
 
     public Integer getId() {
@@ -38,11 +37,11 @@ public class Company {
         this.companyName = companyName;
     }
 
-    public Integer getEmployeeNumber() {
-        return employeeNumber;
+    public Integer getEmployeesNumber() {
+        return employeesNumber;
     }
 
-    public void setEmployeeNumber(Integer employeeNumber) {
-        this.employeeNumber = employeeNumber;
+    public void setEmployeesNumber(Integer employeesNumber) {
+        this.employeesNumber = employeesNumber;
     }
 }
